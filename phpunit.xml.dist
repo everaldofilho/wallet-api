@@ -34,6 +34,8 @@
     <logging>
         <log type="coverage-html" target=".phpunit/coverage-html" />
         <log type="coverage-clover" target=".phpunit/coverage-clover.xml" />
+        <log type="coverage-php" target=".phpunit/coverage.cov"/>
+
     </logging>
 
     <!-- Run `composer require symfony/panther` before enabling this extension -->
