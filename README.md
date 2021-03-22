@@ -12,10 +12,11 @@ A ideia desse projeto é poder fazer transferências entre usuários do próprio
 
 ## Tecnologias utilizadas
 
-
 Linguagem: #PHP 7.3
 
 Framework: #Symfony
+
+Servidor: #Nginx
 
 Banco de dados: #Postgree
 
