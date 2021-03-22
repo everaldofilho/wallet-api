@@ -33,8 +33,9 @@
 
     <logging>
         <log type="coverage-html" target=".phpunit/coverage-html" />
-        <log type="coverage-clover" target=".phpunit/coverage-clover.xml" />
         <log type="coverage-php" target=".phpunit/coverage.cov"/>
+        <log type="coverage-php" target="build/cov/coverage.cov"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
 
     </logging>
 

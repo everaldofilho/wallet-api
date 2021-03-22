@@ -5,5 +5,6 @@ setup:
 test:
 	docker-compose exec -T app php ./bin/phpunit --testdox
 	docker-compose exec -T app chmod -R 777 .phpunit
+	docker-compose exec -T app php vendor/bin/php-coveralls -v
 bash:
 	docker-compose exec app bash
