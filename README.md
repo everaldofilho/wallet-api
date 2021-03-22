@@ -1,3 +1,5 @@
+[![Docker Image CI](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml)
+
 # Wallet API
 
 A ideia desse projeto é poder fazer transferências entre usuários do próprio sistema.
