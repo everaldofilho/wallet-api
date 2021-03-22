@@ -4,3 +4,5 @@ setup:
 	docker-compose exec -T app chmod -R 777 var
 test:
 	docker-compose exec -T app php ./bin/phpunit --testdox
+bash:
+	docker-compose exec app bash
