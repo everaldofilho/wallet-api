@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app: 
+    build: .
+    container_name: wallet_api
+    ports:
+      - 8089:80
+    volumes: 
+     - ./:/app
+

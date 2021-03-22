@@ -1,3 +1,5 @@
+[![Docker Image CI](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml)
+
 # Wallet API
 
 A ideia desse projeto é poder fazer transferências entre usuários do próprio sistema.
@@ -12,10 +14,11 @@ A ideia desse projeto é poder fazer transferências entre usuários do próprio
 
 ## Tecnologias utilizadas
 
-
 Linguagem: #PHP 7.3
 
 Framework: #Symfony
+
+Servidor: #Nginx
 
 Banco de dados: #Postgree
 
