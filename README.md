@@ -1,4 +1,4 @@
-[![Docker Image CI](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/pepiline.yml)
+[![Tests](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml)
 
 # Wallet API
 
