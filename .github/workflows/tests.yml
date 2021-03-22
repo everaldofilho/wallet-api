@@ -20,3 +20,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: ./.phpunit/
+          path-to-lcov: ./.phpunit/coverage-clover.xml
