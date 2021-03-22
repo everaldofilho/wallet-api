@@ -1,5 +1,7 @@
 [![Tests](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml)
 
+[![Coverage Status](https://coveralls.io/repos/github/everaldofilho/wallet-api/badge.svg?branch=main)](https://coveralls.io/github/everaldofilho/wallet-api?branch=main)
+
 # Wallet API
 
 A ideia desse projeto é poder fazer transferências entre usuários do próprio sistema.

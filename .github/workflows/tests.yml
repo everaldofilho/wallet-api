@@ -15,3 +15,8 @@ jobs:
         run: make setup
       - name: Run tests
         run: make test
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base-path: ./.phpunit/coverage-clover.xml
