@@ -26,7 +26,7 @@ class User implements UserInterface
     /**
      * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=UserType::class)
-     * @ORM\Column(name="user_type_id", type="integer")
+     * @ORM\JoinColumn(name="user_type_id", referencedColumnName="id")
      */
     private $type;
 
@@ -146,7 +146,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getType(): ?UserType
+    public function getType()
     {
         return $this->type;
     }
@@ -196,8 +196,4 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function __toString()
-    {
-        return (string) $this->getId();
-    }
 }

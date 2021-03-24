@@ -26,15 +26,9 @@ class AccountController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        try {
-            $this->accountService->createAccount($request->request->all());
-            return $this->json([
-                'message' => "Account created",
-            ], Response::HTTP_CREATED);
-        } catch (ValidationException $th) {
-            return $this->json([
-                'errors' => $th->getErrors(),
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        $this->accountService->createAccount($request->request->all());
+        return $this->json([
+            'message' => "Account created",
+        ], Response::HTTP_CREATED);
     }
 }

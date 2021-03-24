@@ -34,7 +34,7 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
             '98630176000121',
             'financeiro@logistax.com.br',
             '123456789',
-            UserType::TYPE_COMMUN
+            UserType::TYPE_COMPANY
         );
 
         $wallet1 = $this->buildWallet($user1, 5000);

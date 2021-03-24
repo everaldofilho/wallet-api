@@ -20,25 +20,25 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\Column(name="from_user_id", type="integer")
+     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
      */
     private $from_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\Column(name="to_user_id", type="integer")
+     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      */
     private $to_user;
 
     /**
-     * @ORM\Column(name="transaction_status_id", type="integer")
      * @ORM\ManyToOne(targetEntity=TransactionStatus::class)
+     * @ORM\JoinColumn(name="transaction_status_id", referencedColumnName="id")
      */
     private $status;
 
     /**
-     * @ORM\Column(name="transaction_type_id", type="integer")
      * @ORM\ManyToOne(targetEntity=TransactionType::class)
+     * @ORM\JoinColumn(name="transaction_type_id", referencedColumnName="id")
      */
     private $type;
 
