@@ -18,7 +18,7 @@ bash:
 routers:
 	docker-compose exec app php bin/console debug:router
 migrate:
-	docker-compose exec app php bin/console doctrine:migrations:migrate -n
+	docker-compose exec -T app php bin/console doctrine:migrations:migrate -n
 reset:
 	docker-compose exec app rm migrations/*.php
 	docker-compose exec app php bin/console doctrine:schema:drop --force -n
