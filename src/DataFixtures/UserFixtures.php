@@ -5,19 +5,24 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use App\Entity\UserType;
 use App\Entity\Wallet;
+use App\Service\TransactionService;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Tests\Service\TransactionServiceTest;
 
 class UserFixtures extends Fixture  implements DependentFixtureInterface
 {
     private $passwordEncoder;
+    private $transactionService;
+    
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TransactionService $transactionService)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->transactionService = $transactionService;
     }
 
     public function load(ObjectManager $manager)
@@ -45,6 +50,8 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
         $manager->persist($wallet1);
         $manager->persist($wallet2);
         $manager->flush();
+
+        $this->transactionService->transferById($user1->getId(), $user2->getId(), 20);
     }
 
     private function buildUser($name, $document, $email, $password, $type)
