@@ -46,6 +46,11 @@ class Transaction
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $value;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $notification;
 
     /**
      * @ORM\Column(type="datetime")
@@ -56,6 +61,8 @@ class Transaction
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
+
+    
 
     public function getId(): ?int
     {
@@ -143,6 +150,17 @@ class Transaction
     {
         $this->updated_at = $updated_at;
 
+        return $this;
+    }
+
+    public function getNotification(): int
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(int $notification)
+    {
+        $this->notification = $notification;
         return $this;
     }
 }

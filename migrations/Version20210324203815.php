@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210324184932 extends AbstractMigration
+final class Version20210324203815 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -24,7 +24,7 @@ final class Version20210324184932 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE transaction_error_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "user_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE wallet_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE transaction (id INT NOT NULL, from_user_id INT DEFAULT NULL, to_user_id INT DEFAULT NULL, transaction_status_id INT DEFAULT NULL, transaction_type_id INT DEFAULT NULL, value NUMERIC(10, 2) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE transaction (id INT NOT NULL, from_user_id INT DEFAULT NULL, to_user_id INT DEFAULT NULL, transaction_status_id INT DEFAULT NULL, transaction_type_id INT DEFAULT NULL, value NUMERIC(10, 2) NOT NULL, notification INT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_723705D12130303A ON transaction (from_user_id)');
         $this->addSql('CREATE INDEX IDX_723705D129F6EE60 ON transaction (to_user_id)');
         $this->addSql('CREATE INDEX IDX_723705D128D09BFE ON transaction (transaction_status_id)');
