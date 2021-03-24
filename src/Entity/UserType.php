@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=UserTypeRepository::class)
  */
-class UserType
+class UserType implements JsonSerializable
 {
     const TYPE_COMMUN = 1;
     const TYPE_COMPANY = 2;
@@ -23,6 +24,15 @@ class UserType
      * @ORM\Column(type="string", length=45)
      */
     private $description;
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'description' => $this->getDescription(),
+        ];
+    }
 
     public function getId(): ?int
     {

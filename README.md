@@ -13,7 +13,9 @@ Para subir o projeto execute o seguinte comando
 make setup
 ````
 
-API URL: http://localhost:8089
+API URL: http://localhost:8089/api/doc
+![documentacao](./docs/documentation-api.png)
+
 
 Database Postgres: 
 - host: `localhost`

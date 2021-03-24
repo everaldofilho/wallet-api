@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\TransactionTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionTypeRepository::class)
  */
-class TransactionType
+class TransactionType implements JsonSerializable
 {
     const TYPE_TRANSFER = 1;
     const TYPE_WITHDRAW = 2;
@@ -24,6 +25,15 @@ class TransactionType
      * @ORM\Column(type="string", length=45)
      */
     private $description;
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'description' => $this->getDescription(),
+        ];
+    }
 
     public function getId(): ?int
     {

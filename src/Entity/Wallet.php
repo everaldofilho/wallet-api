@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\WalletRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=WalletRepository::class)
  */
-class Wallet
+class Wallet implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -44,6 +45,18 @@ class Wallet
      */
     private $updated_at;
 
+    public function jsonSerialize()
+    {
+        return [
+            'user' => $this->getUser(),
+            'wallet' => [
+                'balance' => $this->getBalance(),
+                'created_at' => $this->getCreatedAt(),
+                'updated_at' => $this->getUpdatedAt(),
+            ],
+            'last_transaction' => $this->getLastTransaction()
+        ];
+    }
 
     public function getId(): ?int
     {

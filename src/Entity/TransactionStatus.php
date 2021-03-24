@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\TransactionStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionStatusRepository::class)
  */
-class TransactionStatus
+class TransactionStatus implements JsonSerializable
 {
     const STATUS_QUEUE = 1;
     const STATUS_PROCESSING = 2;
@@ -26,6 +27,14 @@ class TransactionStatus
      * @ORM\Column(type="string", length=45)
      */
     private $description;
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'description' => $this->getDescription(),
+        ];
+    }
 
     public function getId(): ?int
     {

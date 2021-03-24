@@ -3,18 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\TransactionStatus;
-use App\Exception\TransactionException;
-use App\Exception\ValidationException;
-use App\Service\AccountService;
 use App\Service\TransactionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 /**
- * @Route("/api/transaction", name="transaction")
+ * @Route("/api/transaction", name="transaction") 
+ * @SWG\Tag(name="Transaction")
+ * @SWG\Response(response=200, description="OK")
+ * @SWG\Response(response=401, description="Unauthorized")
+ * @Security(name="Bearer")
  */
 class TransactionController extends AbstractController
 {
@@ -29,7 +31,22 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/transfer", name="transfer", methods="POST")
+     * Last five transactions
+     * @Route("/", name="list", methods="GET")
+     */
+    public function index()
+    {
+        $transactions = $this->transactionService->lastFiveTransaction($this->getUser());
+        return $this->json([
+            'data' => $transactions
+        ]);
+    }
+
+    /**
+     * New transaction
+     * @Route("/", name="transfer", methods="POST")
+     * @SWG\Parameter(name="user", in="formData", type="string",required=true, description="Id do Usuário a qual deseja transferir", default="2")
+     * @SWG\Parameter(name="value", in="formData", type="string",required=true, description="Nome completo", default="")
      */
     public function transfer(Request $request): Response
     {
@@ -42,6 +59,6 @@ class TransactionController extends AbstractController
             'message' => "Transfer success!",
             'status' => TransactionStatus::STATUS_PROCESSED
         ];
-        return $this->json($data, Response::HTTP_OK);
+        return $this->json($data, Response::HTTP_CREATED);
     }
 }

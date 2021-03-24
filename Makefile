@@ -26,6 +26,6 @@ routers:
 reset:
 	# docker-compose exec app rm migrations/*.php
 	docker-compose exec app php bin/console doctrine:schema:drop --force -n
-	docker-compose exec app php bin/console make:migration -n
+	# docker-compose exec app php bin/console make:migration -n
 	make migrate
 	make seed

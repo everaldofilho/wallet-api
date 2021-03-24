@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Entity\UserType;
 use App\Entity\Wallet;
 use App\Exception\TransactionException;
+use App\Repository\TransactionRepository;
 use App\Repository\WalletRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,6 +42,13 @@ class TransactionService
         $this->repositoryWallet = $this->em->getRepository(Wallet::class);
     }
 
+    public function lastFiveTransaction(User $user): array
+    {
+        /** @var TransactionRepository */
+        $repoTransaction = $this->em->getRepository(Transaction::class);
+        return $repoTransaction->findByUserId($user->getId());
+    }
+
     public function transferById($from_user_id, $to_user_id, $value): ?Transaction
     {
         $userRepository = $this->em->getRepository(User::class);
@@ -51,7 +59,6 @@ class TransactionService
         $transaction = $this->transfer($from_user, $to_user, $value);
         return $transaction;
     }
-
 
     private function transfer(?User $from_user, ?User $to_user, $value): ?Transaction
     {
