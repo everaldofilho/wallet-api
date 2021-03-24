@@ -15,7 +15,7 @@ class AccountControllerTest extends TestCase
     public function testCreateAccountWithErrors($data)
     {
 
-        $this->client->request('POST', '/api/account', array_merge([
+        $this->client->request('POST', '/api/account/', array_merge([
             'type' => 1,
             'name' => 'Joaozinho'
         ], $data));
@@ -40,7 +40,7 @@ class AccountControllerTest extends TestCase
      */
     public function testCreateAccountWithSuccess($data)
     {
-        $this->client->request('POST', '/api/account', [
+        $this->client->request('POST', '/api/account/', [
             'type' => $data['type'],
             'name' => 'Joaozinho da silva',
             'document' => $data['document'],
@@ -53,6 +53,30 @@ class AccountControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
     }
+
+    public function testMyAccountSuccess()
+    {
+        $this->createUser('01234567890', 'USER_RULE');
+        $this->client->request('GET', '/api/account/');
+        /** @var JsonResponse $response */
+        $response = $this->client->getResponse();
+        $body = json_decode($response->getContent(), true);
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertTrue(isset($body['data']['wallet']));
+        $this->assertTrue(isset($body['data']['user']));
+        $this->assertTrue(isset($body['data']['last_transaction']));
+    }
+
+
+    public function testMyAccountUnauthorized()
+    {
+        $this->client->request('GET', '/api/account/');
+        /** @var JsonResponse $response */
+        $response = $this->client->getResponse();
+        
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
 
     public function dataProviderAccountInvalid()
     {

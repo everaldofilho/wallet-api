@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\UserType;
 use App\Entity\Wallet;
 use App\Exception\ValidationException;
+use App\Repository\WalletRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use DateTime;
@@ -28,6 +29,11 @@ class AccountService
         $this->validator = $validator;
     }
 
+    public function getWallet(User $user)
+    {
+        return $this->em->getRepository(Wallet::class)->findOneBy(['user' => $user->getId()]);
+    }
+    
     public function createAccount($data)
     {
         $userTypeRepo = $this->em->getRepository(UserType::class);

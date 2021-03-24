@@ -1,0 +1,14 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Wallet API
+            description: Esse é o nossa API para fazer transação online
+            version: 1.0.0
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                name: Authorization
+                in: header
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

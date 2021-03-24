@@ -23,24 +23,38 @@ class TransactionControllerTest extends TestCase
             'user' => 2,
             'value' => 0.10
         ];
-        $this->client->request('POST', '/api/transaction/transfer', $data);
+        $this->client->request('POST', '/api/transaction/', $data);
+
+        /** @var JsonResponse $response */
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+    }
+
+
+    /**
+     * @depends testTransferWithSuccess
+     */
+    public function testLastTransaction()
+    {
+        $this->client->request('GET', '/api/transaction/');
 
         /** @var JsonResponse $response */
         $response = $this->client->getResponse();
         $body = json_decode($response->getContent(), true);
+        $this->assertTrue(count($body['data']) > 0);
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
+
 
     /**
      * @dataProvider dataProviderErrors
      */
     public function testTransferWithError($data)
     {
-        $this->client->request('POST', '/api/transaction/transfer', $data);
+        $this->client->request('POST', '/api/transaction/', $data);
 
         /** @var JsonResponse $response */
         $response = $this->client->getResponse();
-        $body = json_decode($response->getContent(), true);
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 

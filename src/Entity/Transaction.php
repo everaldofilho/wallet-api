@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use App\Repository\TransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
  */
-class Transaction
+class Transaction implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -62,7 +63,24 @@ class Transaction
      */
     private $updated_at;
 
-    
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'type' => $this->getType(),
+            'status' => $this->getStatus(),
+            'to' => [
+                'id' => $this->getToUser()->getId(),
+                'name' => $this->getToUser()->getName()
+            ],
+            'from' => [
+                'id' => $this->getFromUser()->getId(),
+                'name' => $this->getFromUser()->getName()
+            ],
+            'value' => $this->getValue(),
+            'created_at' => $this->getCreatedAt()
+        ];
+    }
 
     public function getId(): ?int
     {
