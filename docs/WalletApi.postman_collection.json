@@ -105,7 +105,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8089/api/account",
+					"raw": "http://localhost:8089/api/account/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -113,7 +113,8 @@
 					"port": "8089",
 					"path": [
 						"api",
-						"account"
+						"account",
+						""
 					]
 				}
 			},
@@ -126,7 +127,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"token\", \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY2MTU3MTEsImV4cCI6MTYxNjYxOTMxMSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.bIVDgXfKGarZ9zCfdqjP1Y4DvhizLi_LC-Xec9kefXPSLp5wzpTJZOdN2OJDQtk2zn1vAaBzEtOVyw-3hqVIcj6skQRIZYWG7m-qucSSQ4-9qBmbi686iBHrQsbWZ9d2Jsl1H6gyN01SYs8yc2t-CL8oXU3xbtxkwwnVIH1CPklsLtpXmK_hWQt-DBNbXS7tDAXb9TGfAE61ZSQmHdv3XjnAh3b35KsQuWgHDbOfcguhw_qk4zTfJMJ78Csf78XNDKyLwkASGJUkGjcG6sKK4SY9wzwBZQ42kaETChUK72fYLvqWmXGp5KkZT6PnaZbIlM2hyKanNf_VZ_LSXK4QWA\");"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -168,14 +169,98 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/api/transaction/transfer",
+					"raw": "{{base_url}}/api/transaction/",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"api",
 						"transaction",
-						"transfer"
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Last transactions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/transaction/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transaction",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My account",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/account/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"account",
+						""
 					]
 				}
 			},
@@ -223,7 +308,7 @@
 	"variable": [
 		{
 			"key": "token",
-			"value": ""
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY2MjQ0ODEsImV4cCI6MTYxNjYyODA4MSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.FBUxT2QyO3sn-a49bqANbG7843QNUCAqRy5NP-7gNDos0X_q9vlv0SXwW1IvdxDf7ua3FGIKTPXHsNOt3Vw32gpcB6zEOAKc5LM_6ZBk-FNiAwhd39rPyTAMJxwBIKanSFUd9iur7q3x1kRzspJF9nugtGsR1zgSieKXqMl8XQwRObjxfqbsRmATsML74lhddSMAzEYzc0559eHrWyw1YmUbyL0qJgjyL7iM_nrq5auOWkjVeFvoWOO49Xdjv_g_BZzgLxd96UJEW3jeTI4QxLSttU2fGcMevqYbjrGc9VMfLBvpXMVAqoGvGO7ibCd2GRARI3O-TNp-puKqfCvvBw"
 		},
 		{
 			"key": "base_url",
