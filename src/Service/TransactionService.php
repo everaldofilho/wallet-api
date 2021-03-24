@@ -27,10 +27,17 @@ class TransactionService
     /** @var WalletRepository */
     private $repositoryWallet;
 
-    public function __construct(EntityManagerInterface $em, AuthorizerService $authorizerService)
-    {
+    /** @var NotificationService */
+    private $notificationService;
+
+    public function __construct(
+        EntityManagerInterface $em,
+        AuthorizerService $authorizerService,
+        NotificationService $notificationService
+    ) {
         $this->em = $em;
         $this->authorizerService = $authorizerService;
+        $this->notificationService = $notificationService;
         $this->repositoryWallet = $this->em->getRepository(Wallet::class);
     }
 
@@ -57,6 +64,7 @@ class TransactionService
         $transactionStatus = $statusRepository->find(TransactionStatus::STATUS_PROCESSING);
 
         $transaction = new Transaction;
+        $transaction->setNotification(0);
         $transaction->setFromUser($from_user);
         $transaction->setToUser($to_user);
         $transaction->setType($transactionType);
@@ -92,6 +100,13 @@ class TransactionService
 
             $this->em->flush();
             $this->em->commit();
+
+            // Notificação caso de erro não importa envia depois
+            $sendNotification = $this->notificationService->sendNotification($transaction);
+            $transaction->setNotification($sendNotification);
+
+            $this->em->persist($walletTo);
+            $this->em->flush();
 
             return $transaction;
         } catch (TransactionException $th) {
