@@ -18,8 +18,11 @@ class AccountService
     private $em;
     private $validator;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        UserPasswordEncoderInterface $passwordEncoder,
+        ValidatorInterface $validator
+    ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
@@ -47,7 +50,7 @@ class AccountService
             $user,
             $data['password']
         ));
-        
+
         $wallet = new Wallet;
         $wallet->setUser($user);
         $wallet->setBalance(500);

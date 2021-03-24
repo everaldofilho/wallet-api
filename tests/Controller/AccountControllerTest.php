@@ -3,7 +3,6 @@
 namespace Tests\Controller;
 
 use App\Entity\UserType;
-use GuzzleHttp\RequestOptions;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
