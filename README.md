@@ -5,13 +5,33 @@
 
 A ideia desse projeto é poder fazer transferências entre usuários do próprio sistema.
 
-## Estrutura de pastas
+## Setup
 
-- [docs](./docs) (Documentação)
-- [src](./src) (Codigo fonte)
-- [tests](./tests) (Testes)
+Para subir o projeto execute o seguinte comando
+
+````
+make setup
+````
+
+API URL: http://localhost:8089
+
+Database Postgres: 
+- host: `localhost`
+- port: `5433`
+- user: `postgres`
+- password: `root`
+
+Arquivos/documentos na pasta [docs](./docs)
+- [MER.svg](./docs/mer.svg)
+- [WalletApi.postman_collection.json](./docs/WalletApi.postman_collection.json)
+
+## Estutura do banco
+![a](./docs/mer.svg)
+
 
 ## Tecnologias utilizadas
+
+Container: #Docker
 
 Linguagem: #PHP 7.4
 
