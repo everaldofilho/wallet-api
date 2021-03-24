@@ -15,7 +15,9 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: make setup
+
       - name: Run tests
         run: make test
+
       - name: Publish coverage
         run: make coverage
