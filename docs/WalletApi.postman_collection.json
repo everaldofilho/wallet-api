@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "8aa4d8eb-eed8-4c2d-8c7e-4ed70472935f",
+		"name": "WalletApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Beare eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY1NDMxMTYsImV4cCI6MTYxNjU0NjcxNiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.JKk4OoSL1Ey9vxVlEusZi91sVKXc85ylsH-FnH4ymRoGpWjTwIJxe19czI9RciUyVb0p35UI2QplhzsDqLtca4KpdiCcAAFY3rGLbJhLH1ua6bC--GSeWGy8KRn0yxl1gHgtKLXbFttIkIFvT5NRr4K4lXM6VHPFZXuo56vGuMRedXzAdgpx4YTE6nRcyAQYSKGz-4m5w11pwBrAP5DQOhZQog3y_oCoeC6kP76OADYbJajRTXFRb_HbjkINjXgpO52LE3eLpLiKThHhnkSnjcYryL54eEII2sFnsdNdWHCm7fi5FnLUwZz0m71RZe28crKgp1RsDprVccMQXJJVUQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/login_check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"login_check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY1NDY1NDgsImV4cCI6MTYxNjU1MDE0OCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.C3mBAay7LSM0Ct9Xkt-oDdljoHQTNuc6uS5mYRgqrtH1bO8U36Osl5RqBNs90Id7o9alIizlaQagxHA8hI163Rh62Eeeu4aC3vWCS1eRQhlOYVxifisy2LIi-zTFAQt0tksFUS0ieKUgiy6k7w1ijU-CRSSTGKq2UYc88bT-0poqrCDiIz9QlP0lWCE-0LsJnDAvXlcwNuC8z1BxdsVsvaImcRYxnoVtU6aJSDsRBOkTWeRCt19HV45FhSY7V3hqbytSa2TKJzF1r5md1xsUz5WpZQ-gXuq2wL0TUPfOUhD2weKxyt3jhET8Jk_B91UfjPMsgtM31JV-R2qdEv8s8A",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "type",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "document",
+							"value": "321456789659",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ana Maria Braga",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ana.maria.braga@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456789",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token\", \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY2MTU3MTEsImV4cCI6MTYxNjYxOTMxMSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.bIVDgXfKGarZ9zCfdqjP1Y4DvhizLi_LC-Xec9kefXPSLp5wzpTJZOdN2OJDQtk2zn1vAaBzEtOVyw-3hqVIcj6skQRIZYWG7m-qucSSQ4-9qBmbi686iBHrQsbWZ9d2Jsl1H6gyN01SYs8yc2t-CL8oXU3xbtxkwwnVIH1CPklsLtpXmK_hWQt-DBNbXS7tDAXb9TGfAE61ZSQmHdv3XjnAh3b35KsQuWgHDbOfcguhw_qk4zTfJMJ78Csf78XNDKyLwkASGJUkGjcG6sKK4SY9wzwBZQ42kaETChUK72fYLvqWmXGp5KkZT6PnaZbIlM2hyKanNf_VZ_LSXK4QWA\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "value",
+							"value": "0.01",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transaction/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transaction",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest({",
+					"    url: pm.variables.get('base_url') + '/api/login_check',",
+					"    method: 'POST',",
+					"    header: 'content-type:multipart/form-data; boundary=postman',",
+					"    body: '--postman\\r\\n' + ",
+					"        'Content-Disposition: form-data; name=\"username\"\\r\\n' +",
+					"        '\\r\\n' +",
+					"        pm.variables.get('username') + '\\r\\n' +",
+					"        '--postman\\r\\n' +",
+					"        'Content-Disposition: form-data; name=\"password\\r\\n' +",
+					"        '\\r\\n' +",
+					"        pm.variables.get('password') + '\\r\\n' +",
+					"        '--postman--'",
+					"}, function (error, response) {",
+					"    response = response.json();",
+					"    if (! error && typeof response.token !== 'undefined') {",
+					"        pm.variables.set('token', response.token);",
+					"    }",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:8089"
+		},
+		{
+			"key": "username",
+			"value": "01234567890"
+		},
+		{
+			"key": "password",
+			"value": "123456789"
+		}
+	]
+}
