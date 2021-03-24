@@ -1,5 +1,5 @@
 [![Tests](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml)
-[![Coverage Status](https://coveralls.io/repos/github/everaldofilho/wallet-api/badge.svg?branch=main)](https://coveralls.io/github/everaldofilho/wallet-api?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/everaldofilho/wallet-api/badge.svg)](https://coveralls.io/github/everaldofilho/wallet-api)
 
 # Wallet API
 
@@ -10,8 +10,6 @@ A ideia desse projeto é poder fazer transferências entre usuários do próprio
 - [docs](./docs) (Documentação)
 - [src](./src) (Codigo fonte)
 - [tests](./tests) (Testes)
-    - [unit](./tests/unit) (Testes Unitários)
-    - [funcional](./tests/funcional) (Testes funcionais) 
 
 ## Tecnologias utilizadas
 
