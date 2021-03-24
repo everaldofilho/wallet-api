@@ -19,7 +19,7 @@ class TransactionError
 
     /**
      * @ORM\ManyToOne(targetEntity=Transaction::class)
-     * @ORM\Column(name="transaction_id", type="integer")
+     * @ORM\JoinColumn(name="transaction_id", referencedColumnName="id")
      */
     private $transaction;
 

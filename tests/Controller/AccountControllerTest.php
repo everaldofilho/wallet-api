@@ -3,26 +3,25 @@
 namespace Tests\Controller;
 
 use App\Entity\UserType;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\TestCase;
 
-class AccountControllerTest extends WebTestCase
+class AccountControllerTest extends TestCase
 {
     /**
      * @dataProvider dataProviderAccountInvalid
      */
     public function testCreateAccountWithErrors($data)
     {
-        $client = static::createClient();
 
-        $client->request('POST', '/api/account', array_merge([
+        $this->client->request('POST', '/api/account', array_merge([
             'type' => 1,
             'name' => 'Joaozinho'
         ], $data));
 
         /** @var JsonResponse $response */
-        $response = $client->getResponse();
+        $response = $this->client->getResponse();
         $body = json_decode($response->getContent(), true);
 
         $this->assertGreaterThanOrEqual(1, count($body['errors']));
@@ -41,8 +40,7 @@ class AccountControllerTest extends WebTestCase
      */
     public function testCreateAccountWithSuccess($data)
     {
-        $client = static::createClient();
-        $client->request('POST', '/api/account', [
+        $this->client->request('POST', '/api/account', [
             'type' => $data['type'],
             'name' => 'Joaozinho da silva',
             'document' => $data['document'],
@@ -51,7 +49,7 @@ class AccountControllerTest extends WebTestCase
         ]);
 
         /** @var JsonResponse $response */
-        $response = $client->getResponse();
+        $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
     }

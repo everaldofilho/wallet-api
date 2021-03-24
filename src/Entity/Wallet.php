@@ -19,13 +19,13 @@ class Wallet
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Transaction::class)
-     * @ORM\Column(name="last_transaction_id", nullable = true)
+     * @ORM\JoinColumn(name="last_transaction_id", referencedColumnName="id", nullable = true)
      */
     private $last_transaction;
 

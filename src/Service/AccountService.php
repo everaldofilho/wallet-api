@@ -57,14 +57,14 @@ class AccountService
         $wallet->setCreatedAt(new DateTime());
         $wallet->setUpdatedAt(new DateTime());
 
-        $this->em->getConnection()->beginTransaction();
+        $this->em->beginTransaction();
         try {
             $this->em->persist($user);
             $this->em->persist($wallet);
             $this->em->flush();
-            $this->em->getConnection()->commit();
+            $this->em->commit();
         } catch (\Throwable $th) {
-            $this->em->getConnection()->rollBack();
+            $this->em->rollBack();
             throw $th;
         }
     }
