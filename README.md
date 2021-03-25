@@ -1,3 +1,4 @@
+[![code-inspector](https://www.code-inspector.com/project/20527/score/svg)](https://frontend.code-inspector.com/public/project/20527/wallet-api/dashboard)
 [![CodeFactor](https://www.codefactor.io/repository/github/everaldofilho/wallet-api/badge)](https://www.codefactor.io/repository/github/everaldofilho/wallet-api)
 [![Tests](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml/badge.svg)](https://github.com/everaldofilho/wallet-api/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/everaldofilho/wallet-api/badge.svg)](https://coveralls.io/github/everaldofilho/wallet-api)
