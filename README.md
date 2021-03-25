@@ -17,6 +17,7 @@ make setup
 API URL: http://localhost:8089/api/doc
 ![documentacao](./docs/documentation-api.png)
 
+POSTMAN: https://documenter.getpostman.com/view/9357548/TzCHCWB9
 
 Database Postgres: 
 - host: `localhost`
