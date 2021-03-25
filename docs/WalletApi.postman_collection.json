@@ -168,7 +168,182 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "401",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "value",
+									"value": "0.01",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"transaction",
+								""
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.14.2"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "WWW-Authenticate",
+							"value": "Bearer"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 Mar 2021 22:48:00 GMT"
+						},
+						{
+							"key": "X-Robots-Tag",
+							"value": "noindex"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 401,\n    \"message\": \"JWT Token not found\"\n}"
+				},
+				{
+					"name": "201",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "value",
+									"value": "0.01",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"transaction",
+								""
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.14.2"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 25 Mar 2021 15:40:43 GMT"
+						},
+						{
+							"key": "X-Robots-Tag",
+							"value": "noindex"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Transfer success!\",\n    \"status\": 3\n}"
+				}
+			]
 		},
 		{
 			"name": "Last transactions",
@@ -210,7 +385,73 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/transaction/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"transaction",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.14.2"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 25 Mar 2021 15:41:18 GMT"
+						},
+						{
+							"key": "X-Robots-Tag",
+							"value": "noindex"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 4,\n            \"type\": {\n                \"id\": 1,\n                \"description\": \"Transferência\"\n            },\n            \"status\": {\n                \"id\": 5,\n                \"description\": \"Erro ao processar\"\n            },\n            \"to\": {\n                \"id\": 2,\n                \"name\": \"Logista X\"\n            },\n            \"from\": {\n                \"id\": 5,\n                \"name\": \"Ana Maria Braga\"\n            },\n            \"value\": \"0.01\",\n            \"created_at\": {\n                \"date\": \"2021-03-25 12:40:30.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            }\n        },\n        {\n            \"id\": 5,\n            \"type\": {\n                \"id\": 1,\n                \"description\": \"Transferência\"\n            },\n            \"status\": {\n                \"id\": 3,\n                \"description\": \"Processado com sucesso\"\n            },\n            \"to\": {\n                \"id\": 2,\n                \"name\": \"Logista X\"\n            },\n            \"from\": {\n                \"id\": 5,\n                \"name\": \"Ana Maria Braga\"\n            },\n            \"value\": \"0.01\",\n            \"created_at\": {\n                \"date\": \"2021-03-25 12:40:41.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            }\n        }\n    ]\n}"
+				}
+			]
 		},
 		{
 			"name": "My account",
@@ -252,7 +493,73 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/account/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"account",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.14.2"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 24 Mar 2021 23:22:27 GMT"
+						},
+						{
+							"key": "X-Robots-Tag",
+							"value": "noindex"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"user\": {\n            \"id\": 5,\n            \"type\": {\n                \"id\": 1,\n                \"description\": \"Pessoa Fisica\"\n            },\n            \"name\": \"Ana Maria Braga\",\n            \"email\": \"ana.maria.braga@gmail.com\",\n            \"created_at\": {\n                \"date\": \"2021-03-24 20:21:52.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            },\n            \"updated_at\": {\n                \"date\": \"2021-03-24 20:21:52.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            }\n        },\n        \"wallet\": {\n            \"balance\": \"500.00\",\n            \"created_at\": {\n                \"date\": \"2021-03-24 20:21:52.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            },\n            \"updated_at\": {\n                \"date\": \"2021-03-24 20:21:52.000000\",\n                \"timezone_type\": 3,\n                \"timezone\": \"America/Sao_Paulo\"\n            }\n        },\n        \"last_transaction\": null\n    }\n}"
+				}
+			]
 		}
 	],
 	"event": [
@@ -278,7 +585,7 @@
 	"variable": [
 		{
 			"key": "token",
-			"value": ""
+			"value": "{token}"
 		},
 		{
 			"key": "base_url",
