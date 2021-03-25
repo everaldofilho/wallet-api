@@ -273,25 +273,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"pm.sendRequest({",
-					"    url: pm.variables.get('base_url') + '/api/login_check',",
-					"    method: 'POST',",
-					"    header: 'content-type:multipart/form-data; boundary=postman',",
-					"    body: '--postman\\r\\n' + ",
-					"        'Content-Disposition: form-data; name=\"username\"\\r\\n' +",
-					"        '\\r\\n' +",
-					"        pm.variables.get('username') + '\\r\\n' +",
-					"        '--postman\\r\\n' +",
-					"        'Content-Disposition: form-data; name=\"password\\r\\n' +",
-					"        '\\r\\n' +",
-					"        pm.variables.get('password') + '\\r\\n' +",
-					"        '--postman--'",
-					"}, function (error, response) {",
-					"    response = response.json();",
-					"    if (! error && typeof response.token !== 'undefined') {",
-					"        pm.variables.set('token', response.token);",
-					"    }",
-					"});"
+					""
 				]
 			}
 		},
@@ -308,7 +290,7 @@
 	"variable": [
 		{
 			"key": "token",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTY2MjQ0ODEsImV4cCI6MTYxNjYyODA4MSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiMDEyMzQ1Njc4OTAifQ.FBUxT2QyO3sn-a49bqANbG7843QNUCAqRy5NP-7gNDos0X_q9vlv0SXwW1IvdxDf7ua3FGIKTPXHsNOt3Vw32gpcB6zEOAKc5LM_6ZBk-FNiAwhd39rPyTAMJxwBIKanSFUd9iur7q3x1kRzspJF9nugtGsR1zgSieKXqMl8XQwRObjxfqbsRmATsML74lhddSMAzEYzc0559eHrWyw1YmUbyL0qJgjyL7iM_nrq5auOWkjVeFvoWOO49Xdjv_g_BZzgLxd96UJEW3jeTI4QxLSttU2fGcMevqYbjrGc9VMfLBvpXMVAqoGvGO7ibCd2GRARI3O-TNp-puKqfCvvBw"
+			"value": ""
 		},
 		{
 			"key": "base_url",
