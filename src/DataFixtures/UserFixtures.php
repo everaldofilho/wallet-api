@@ -4,61 +4,47 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\UserType;
-use App\Entity\Wallet;
-use App\Service\TransactionService;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Tests\Service\TransactionServiceTest;
 
 class UserFixtures extends Fixture  implements DependentFixtureInterface
 {
     private $passwordEncoder;
-    private $transactionService;
-    
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, TransactionService $transactionService)
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
-        $this->transactionService = $transactionService;
     }
 
     public function load(ObjectManager $manager)
     {
-        $user1 = $this->buildUser(
+        $this->createUser(
+            $manager,
             'Joãozinho da silva',
             '01234567890',
             'joaozinho@gmail.com',
             '123456789',
             UserType::TYPE_COMMUN
         );
-        $user2 = $this->buildUser(
+        $this->createUser(
+            $manager,
             'Logista X',
             '98630176000121',
             'financeiro@logistax.com.br',
             '123456789',
             UserType::TYPE_COMPANY
         );
-
-        $wallet1 = $this->buildWallet($user1, 5000);
-        $wallet2 = $this->buildWallet($user2, 5000);
-
-        $manager->persist($user1);
-        $manager->persist($user2);
-        $manager->persist($wallet1);
-        $manager->persist($wallet2);
-        $manager->flush();
-
-        $this->transactionService->transferById($user1->getId(), $user2->getId(), 20);
     }
 
-    private function buildUser($name, $document, $email, $password, $type)
+    private function createUser($manager, $name, $document, $email, $password, $type)
     {
         $userType = $this->getReference("user_type_" . $type);
-        $user = (new User())
-            ->setName($name)
+        $user = new User;
+        $user->setName($name)
             ->setDocument($document)
             ->setEmail($email)
             ->setType($userType)
@@ -70,18 +56,10 @@ class UserFixtures extends Fixture  implements DependentFixtureInterface
             $password
         ));
 
-        return $user;
-    }
+        $manager->persist($user);
+        $manager->flush();
 
-    private function buildWallet($user, $balance)
-    {
-        $wallet = (new Wallet())
-            ->setUser($user)
-            ->setBalance($balance)
-            ->setCreatedAt(new DateTime())
-            ->setUpdatedAt(new DateTime());
-
-        return $wallet;
+        $this->setReference('user_'. $type, $user);
     }
 
     public function getDependencies()

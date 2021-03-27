@@ -10,9 +10,8 @@ class TransactionTypeFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $this->create($manager, TransactionType::TYPE_TRANSFER, 'Transferência');
-        $this->create($manager, TransactionType::TYPE_WITHDRAW, 'Saque');
-        $this->create($manager, TransactionType::TYPE_PURCHASE, 'Compra');
+        $this->create($manager, TransactionType::TYPE_CREDIT, 'Entrada');
+        $this->create($manager, TransactionType::TYPE_DEBIT, 'Saida');
 
         $manager->flush();
     }
@@ -24,5 +23,7 @@ class TransactionTypeFixtures extends Fixture
             ->setDescription($description);
 
         $manager->persist($transactionType);
+
+        $this->setReference('transaction_type_'. $id, $transactionType);
     }
 }

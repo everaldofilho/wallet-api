@@ -64,7 +64,6 @@ class AccountControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertTrue(isset($body['data']['wallet']));
         $this->assertTrue(isset($body['data']['user']));
-        $this->assertTrue(isset($body['data']['last_transaction']));
     }
 
 

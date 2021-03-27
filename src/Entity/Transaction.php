@@ -3,65 +3,70 @@
 namespace App\Entity;
 
 use App\Repository\TransactionRepository;
+use App\Traits\EntityTimestamp;
+use App\Traits\EntityUuid;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
  */
 class Transaction implements JsonSerializable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use EntityTimestamp;
+    use EntityUuid;
 
     /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $from_user;
+    private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
-     */
-    private $to_user;
-
-    /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=TransactionStatus::class)
      * @ORM\JoinColumn(name="transaction_status_id", referencedColumnName="id")
      */
     private $status;
 
     /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=TransactionType::class)
      * @ORM\JoinColumn(name="transaction_type_id", referencedColumnName="id")
      */
     private $type;
 
     /**
+     * @Assert\NotBlank
+     * @ORM\ManyToOne(targetEntity=TransactionCategory::class)
+     * @ORM\JoinColumn(name="transaction_category_id", referencedColumnName="id")
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=TransactionTransfer::class)
+     * @ORM\JoinColumn(name="transaction_transfer_id", referencedColumnName="id", nullable = true)
+     */
+    private $transfer;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $description;
+
+    /**
+     * @Assert\NotBlank
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $value;
-    
+
     /**
-     * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @ORM\Column(type="boolean")
      */
     private $notification;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
 
     public function jsonSerialize()
     {
@@ -69,44 +74,23 @@ class Transaction implements JsonSerializable
             'id' => $this->getId(),
             'type' => $this->getType(),
             'status' => $this->getStatus(),
-            'to' => [
-                'id' => $this->getToUser()->getId(),
-                'name' => $this->getToUser()->getName()
-            ],
-            'from' => [
-                'id' => $this->getFromUser()->getId(),
-                'name' => $this->getFromUser()->getName()
-            ],
+            'category' => $this->getCategory(),
+            'transfer' => $this->getTransfer(),
+            'description' => $this->getDescription(),
             'value' => $this->getValue(),
-            'created_at' => $this->getCreatedAt()
+            'created_at' => $this->getCreatedAt(),
+            'updated_at' => $this->getUpdatedAt()
         ];
     }
 
-    public function getId(): ?int
+    public function getUser(): ?User
     {
-        return $this->id;
+        return $this->user;
     }
 
-    public function getFromUser(): ?User
+    public function setUser(?User $user): self
     {
-        return $this->from_user;
-    }
-
-    public function setFromUser(?User $from_user): self
-    {
-        $this->from_user = $from_user;
-
-        return $this;
-    }
-
-    public function getToUser(): ?User
-    {
-        return $this->to_user;
-    }
-
-    public function setToUser(?User $to_user): self
-    {
-        $this->to_user = $to_user;
+        $this->user = $user;
 
         return $this;
     }
@@ -135,39 +119,14 @@ class Transaction implements JsonSerializable
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getValue(): ?float
     {
         return $this->value;
     }
 
-    public function setValue(string $value): self
+    public function setValue(float $value): self
     {
         $this->value = $value;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
         return $this;
     }
 
@@ -179,6 +138,39 @@ class Transaction implements JsonSerializable
     public function setNotification(int $notification)
     {
         $this->notification = $notification;
+        return $this;
+    }
+
+    public function getCategory(): TransactionCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(TransactionCategory $category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getTransfer(): TransactionTransfer
+    {
+        return $this->transfer;
+    }
+
+    public function setTransfer(?TransactionTransfer $transfer)
+    {
+        $this->transfer = $transfer;
         return $this;
     }
 }

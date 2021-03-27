@@ -19,32 +19,35 @@ class WalletRepository extends ServiceEntityRepository
         parent::__construct($registry, Wallet::class);
     }
 
-    // /**
-    //  * @return Wallet[] Returns an array of Wallet objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function debit($transaction_id, $user_id, float $value)
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $result = $this->getEntityManager()
+            ->createQuery('UPDATE App\Entity\Wallet t 
+                SET t.balance = t.balance + :value,
+                t.last_transaction = :transaction_id
+                where t.user = :user_id')
+            ->setParameters([
+                'transaction_id' => $transaction_id,
+                'user_id' => $user_id,
+                'value' => $value
+            ])
+            ->execute();
 
-    /*
-    public function findOneBySomeField($value): ?Wallet
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $result;
     }
-    */
+
+    public function credit($transaction_id,  $user_id, float $value)
+    {
+        $result = $this->getEntityManager()
+            ->createQuery('UPDATE App\Entity\Wallet t 
+                SET t.balance = t.balance - :value,  t.last_transaction = :transaction_id
+                where t.user = :user_id')
+            ->setParameters([
+                'transaction_id' => $transaction_id,
+                'user_id' => $user_id,
+                'value' => $value
+            ])
+            ->execute();
+        return $result;
+    }
 }
