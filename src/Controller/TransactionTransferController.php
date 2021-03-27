@@ -39,37 +39,35 @@ class TransactionTransferController extends AbstractController
      */
     public function transferByDocument(Request $request): Response
     {
-        $transaction = $this->transferService->transferByDocument(
+        $transactionDocument = $this->transferService->transferByDocument(
             $this->getUser(),
             $request->get('document'),
             $request->get('value')
         );
-        $data = [
-            'status' => $transaction->getStatus()->getId(),
+        return $this->json([
+            'status' => $transactionDocument->getStatus()->getId(),
             'message' => 'Transferencia efetuada com sucesso!',
-            'data' => $transaction
-        ];
-        return $this->json($data, Response::HTTP_CREATED);
+            'data' => $transactionDocument
+        ], Response::HTTP_CREATED);
     }
 
     /**
      * New transaction by Email
      * @Route("/email", name="transfer_email", methods="POST")
-     * @SWG\Parameter(name="email", in="formData", type="string",required=true, description="E-mail", default="01234567890")
+     * @SWG\Parameter(name="email", in="formData", type="string",required=true, description="E-mail", default="financeiro@logistax.com.br")
      * @SWG\Parameter(name="value", in="formData", type="string",required=true, description="Valor da transferencia", default="10.00")
      */
     public function transferByEmail(Request $request): Response
     {
-        $transaction = $this->transferService->transferByEmail(
+        $transactionEmail = $this->transferService->transferByEmail(
             $this->getUser(),
             $request->get('email'),
             $request->get('value')
         );
-        $data = [
-            'status' => $transaction->getStatus()->getId(),
+        return $this->json([
+            'status' => $transactionEmail->getStatus()->getId(),
             'message' => 'Transferencia efetuada com sucesso!',
-            'data' => $transaction
-        ];
-        return $this->json($data, Response::HTTP_CREATED);
+            'data' => $transactionEmail
+        ], Response::HTTP_CREATED);
     }
 }
