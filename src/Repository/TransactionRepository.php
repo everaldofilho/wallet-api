@@ -32,8 +32,7 @@ class TransactionRepository extends ServiceEntityRepository
             ->orderBy('t.id', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /*
