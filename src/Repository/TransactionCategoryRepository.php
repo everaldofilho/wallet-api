@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\TransactionError;
+use App\Entity\TransactionCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method TransactionError|null find($id, $lockMode = null, $lockVersion = null)
- * @method TransactionError|null findOneBy(array $criteria, array $orderBy = null)
- * @method TransactionError[]    findAll()
- * @method TransactionError[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TransactionCategory|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TransactionCategory|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TransactionCategory[]    findAll()
+ * @method TransactionCategory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TransactionErrorRepository extends ServiceEntityRepository
+class TransactionCategoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TransactionError::class);
+        parent::__construct($registry, TransactionCategory::class);
     }
 
     // /**
-    //  * @return TransactionError[] Returns an array of TransactionError objects
+    //  * @return TransactionCategory[] Returns an array of TransactionCategory objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class TransactionErrorRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?TransactionError
+    public function findOneBySomeField($value): ?TransactionCategory
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')

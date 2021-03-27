@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WalletRepository;
+use App\Traits\EntityTimestamp;
+use App\Traits\EntityUuid;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -11,12 +13,8 @@ use JsonSerializable;
  */
 class Wallet implements JsonSerializable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    use EntityUuid;
+    use EntityTimestamp;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist", "remove"})
@@ -35,15 +33,6 @@ class Wallet implements JsonSerializable
      */
     private $balance;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
 
     public function jsonSerialize()
     {
@@ -56,11 +45,6 @@ class Wallet implements JsonSerializable
             ],
             'last_transaction' => $this->getLastTransaction()
         ];
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getLastTransaction(): ?Transaction
@@ -83,30 +67,6 @@ class Wallet implements JsonSerializable
     public function setBalance(string $balance): self
     {
         $this->balance = $balance;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
 
         return $this;
     }

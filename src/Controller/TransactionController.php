@@ -41,24 +41,4 @@ class TransactionController extends AbstractController
             'data' => $transactions
         ]);
     }
-
-    /**
-     * New transaction
-     * @Route("/", name="transfer", methods="POST")
-     * @SWG\Parameter(name="user", in="formData", type="string",required=true, description="Id do Usuário a qual deseja transferir", default="2")
-     * @SWG\Parameter(name="value", in="formData", type="string",required=true, description="Nome completo", default="")
-     */
-    public function transfer(Request $request): Response
-    {
-        $this->transactionService->transferById(
-            $this->getUser()->getId(),
-            $request->get('user'),
-            $request->get('value')
-        );
-        $data = [
-            'message' => "Transfer success!",
-            'status' => TransactionStatus::STATUS_PROCESSED
-        ];
-        return $this->json($data, Response::HTTP_CREATED);
-    }
 }

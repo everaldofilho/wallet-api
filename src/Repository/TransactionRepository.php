@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Transaction;
+use App\Entity\TransactionStatus;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,13 +27,12 @@ class TransactionRepository extends ServiceEntityRepository
     public function findByUserId($id)
     {
         return $this->createQueryBuilder('t')
-            ->where('t.from_user = :from_user')
-            ->setParameter('from_user', $id)
-            ->orderBy('t.id', 'ASC')
+            ->where('t.user = :user')->setParameter('user', $id)
+            ->andWhere('t.status = :status')->setParameter('status', TransactionStatus::STATUS_PROCESSED)
+            ->orderBy('t.id', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /*

@@ -3,17 +3,16 @@
 namespace App\Service;
 
 use App\Entity\Transaction;
-use App\Entity\TransactionError;
 use App\Entity\TransactionStatus;
 use App\Entity\TransactionType;
 use App\Entity\User;
-use App\Entity\UserType;
-use App\Entity\Wallet;
 use App\Exception\TransactionException;
+use App\Exception\ValidationException;
 use App\Repository\TransactionRepository;
 use App\Repository\WalletRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 
 class TransactionService
@@ -22,146 +21,92 @@ class TransactionService
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var AuthorizerService */
-    private $authorizerService;
+    /** @var TransactionRepository */
+    private $transactionRepository;
 
-    /** @var WalletRepository */
-    private $repositoryWallet;
+    /** @var WalletService */
+    private $walletService;
 
-    /** @var NotificationService */
-    private $notificationService;
+    /** @var ValidatorInterface */
+    private $validator;
 
     public function __construct(
         EntityManagerInterface $em,
-        AuthorizerService $authorizerService,
-        NotificationService $notificationService
+        TransactionRepository $transactionRepository,
+        WalletService $walletService,
+        ValidatorInterface $validator
     ) {
         $this->em = $em;
-        $this->authorizerService = $authorizerService;
-        $this->notificationService = $notificationService;
-        $this->repositoryWallet = $this->em->getRepository(Wallet::class);
+        $this->transactionRepository = $transactionRepository;
+        $this->walletService = $walletService;
+        $this->validator = $validator;
     }
 
     public function lastFiveTransaction(User $user): array
     {
-        /** @var TransactionRepository */
-        $repoTransaction = $this->em->getRepository(Transaction::class);
-        return $repoTransaction->findByUserId($user->getId());
+        return $this->transactionRepository->findByUserId($user->getId());
     }
 
-    public function transferById($from_user_id, $to_user_id, $value): ?Transaction
+    public function updateTransactionStatus(Transaction $transaction, int $status)
     {
-        $userRepository = $this->em->getRepository(User::class);
-
-        $from_user = $userRepository->find($from_user_id);
-        $to_user = $userRepository->find($to_user_id);
-
-        $transaction = $this->transfer($from_user, $to_user, $value);
-        return $transaction;
+        $this->transactionRepository->updateStatus($transaction->getId(), $status);
     }
 
-    private function transfer(?User $from_user, ?User $to_user, $value): ?Transaction
+    public function createTransaction(array $data): ?Transaction
     {
-        $this->validateTransfer($from_user, $to_user, $value);
-
-        $statusRepository = $this->em->getRepository(TransactionStatus::class);
-        $typeRepository = $this->em->getRepository(TransactionType::class);
-
-        $transactionType = $typeRepository->find(TransactionType::TYPE_TRANSFER);
-        $transactionStatus = $statusRepository->find(TransactionStatus::STATUS_PROCESSING);
-
         $transaction = new Transaction;
-        $transaction->setNotification(0);
-        $transaction->setFromUser($from_user);
-        $transaction->setToUser($to_user);
-        $transaction->setType($transactionType);
-        $transaction->setStatus($transactionStatus);
-        $transaction->setValue($value);
+        $transaction->setNotification($data['notification'] ?? 0);
+        $transaction->setTransfer($data['transfer'] ?? null);
+        $transaction->setUser($data['user'] ?? null);
+        $transaction->setStatus($data['status'] ?? null);
+        $transaction->setType($data['type'] ?? null);
+        $transaction->setCategory($data['category'] ?? null);
+        $transaction->setValue($data['value'] ?? 0);
+        $transaction->setDescription($data['description'] ?? '');
         $transaction->setCreatedAt(new DateTime());
         $transaction->setUpdatedAt(new DateTime());
+
+        $errors = $this->validator->validate($transaction);
+
+        if (count($errors) > 0) {
+            throw new ValidationException($errors);
+        }
+
+        $this->businessValidation($transaction);
 
         $this->em->persist($transaction);
         $this->em->flush();
 
-        $this->em->beginTransaction();
+        $this->persistWallet($transaction);
 
-        try {
+        return $transaction;
+    }
 
-            if (!$this->authorizerService->isAuthorized()) {
-                throw new TransactionException("No authorized", TransactionStatus::STATUS_DENIED);
-            }
+    private function persistWallet(Transaction $transaction)
+    {
+        if ($transaction->getStatus()->getId() != TransactionStatus::STATUS_PROCESSED) {
+            return;
+        }
+        if ($transaction->getType()->getId() == TransactionType::TYPE_DEBIT) {
+            $this->walletService->walletDebit($transaction);
+        }
 
-            $walletFrom = $this->repositoryWallet->findOneBy(['user' => $from_user->getId()]);
-            $walletFrom->setLastTransaction($transaction);
-            $walletFrom->setBalance($walletFrom->getBalance() - $transaction->getValue());
-
-            $walletTo = $this->repositoryWallet->findOneBy(['user' => $to_user->getId()]);
-            $walletTo->setLastTransaction($transaction);
-            $walletTo->setBalance($walletTo->getBalance() + $transaction->getValue());
-
-            $transaction->setStatus($statusRepository->find(TransactionStatus::STATUS_PROCESSED));
-
-            $this->em->persist($transaction);
-            $this->em->persist($walletFrom);
-            $this->em->persist($walletTo);
-
-            $this->em->flush();
-            $this->em->commit();
-
-            // Notificação caso de erro não importa envia depois
-            $sendNotification = $this->notificationService->sendNotification($transaction);
-            $transaction->setNotification($sendNotification);
-
-            $this->em->persist($walletTo);
-            $this->em->flush();
-
-            return $transaction;
-        } catch (TransactionException $th) {
-            $this->em->rollback();
-
-            $transaction->setStatus($statusRepository->find($th->getStatus() ?: TransactionStatus::STATUS_ERROR));
-
-            $transactionError = new TransactionError;
-            $transactionError->setTransaction($transaction);
-            $transactionError->setError($th->getMessage());
-            $transactionError->setUpdatedAt(new DateTime());
-            $transactionError->setCreatedAt(new DateTime());
-
-            $this->em->persist($transaction);
-
-            throw $th;
-        } catch (Throwable $th) {
-            $this->em->rollback();
-            $transaction->setStatus($statusRepository->find(TransactionStatus::STATUS_ERROR));
-            throw $th;
-        } finally {
-            $this->em->persist($transaction);
-            $this->em->flush();
+        if ($transaction->getType()->getId() == TransactionType::TYPE_CREDIT) {
+            $this->walletService->walletCredit($transaction);
         }
     }
 
-    private function validateTransfer(?User $from_user, ?User $to_user, $value)
+    private function businessValidation(Transaction $transaction)
     {
-        if (!$from_user || !$to_user) {
-            throw new TransactionException("User does not exist!");
-        }
-
-        if ($from_user->getId() == $to_user->getId()) {
-            throw new TransactionException("Not authorized to make transfers for yourself!");
-        }
-
-        if ($from_user->getType()->getId() == UserType::TYPE_COMPANY) {
-            throw new TransactionException("Unauthorized company transfer!");
-        }
-
-        if ($value <= 0) {
+        if ($transaction->getValue() <= 0) {
             throw new TransactionException("value invalid!");
         }
 
-        $wallet = $this->repositoryWallet->findOneBy(['user' => $from_user->getId()]);
-
-        if ($value >= $wallet->getBalance()) {
-            throw new TransactionException("Insufficient balance!");
+        if ($transaction->getType()->getId() == TransactionType::TYPE_DEBIT) {
+            $wallet = $this->walletService->getWallet($transaction->getUser());
+            if ($transaction->getValue() >= $wallet->getBalance()) {
+                throw new TransactionException("Insufficient balance!");
+            }
         }
     }
 }

@@ -26,5 +26,6 @@ class TransactionStatusFixtures extends Fixture
             ->setDescription($description);
 
         $manager->persist($transactionStatus);
+        $this->setReference('transaction_status_'. $id, $transactionStatus);
     }
 }
