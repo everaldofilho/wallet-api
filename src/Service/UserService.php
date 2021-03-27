@@ -61,7 +61,9 @@ class UserService
         $user->setCreatedAt(new DateTime());
         $user->setUpdatedAt(new DateTime());
 
-        if (count($errors = $this->validator->validate($user)) > 0) {
+        $errors = $this->validator->validate($user);
+
+        if (count($errors) > 0) {
             throw new ValidationException($errors);
         }
 

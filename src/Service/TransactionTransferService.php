@@ -121,7 +121,9 @@ class TransactionTransferService
         $transfer->setCreatedAt(new DateTime);
         $transfer->setUpdatedAt(new DateTime);
 
-        if (count($errors = $this->validator->validate($transfer)) > 0) {
+        $errors = $this->validator->validate($transfer);
+
+        if (count($errors) > 0) {
             throw new ValidationException($errors);
         }
 

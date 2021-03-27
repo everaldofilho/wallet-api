@@ -66,7 +66,9 @@ class TransactionService
         $transaction->setCreatedAt(new DateTime());
         $transaction->setUpdatedAt(new DateTime());
 
-        if (count($errors = $this->validator->validate($transaction)) > 0) {
+        $errors = $this->validator->validate($transaction);
+
+        if (count($errors) > 0) {
             throw new ValidationException($errors);
         }
 
