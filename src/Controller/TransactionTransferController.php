@@ -46,8 +46,7 @@ class TransactionTransferController extends AbstractController
         );
         return $this->json([
             'status' => $transactionDocument->getStatus()->getId(),
-            'message' => 'Transferencia efetuada com sucesso!',
-            'data' => $transactionDocument
+            'message' => 'Transferencia efetuada com sucesso!'
         ], Response::HTTP_CREATED);
     }
 
@@ -66,8 +65,7 @@ class TransactionTransferController extends AbstractController
         );
         return $this->json([
             'status' => $transactionEmail->getStatus()->getId(),
-            'message' => 'Transferencia efetuada com sucesso!',
-            'data' => $transactionEmail
+            'message' => 'Transferencia efetuada com sucesso!'
         ], Response::HTTP_CREATED);
     }
 }
