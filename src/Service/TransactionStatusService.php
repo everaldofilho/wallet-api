@@ -7,15 +7,15 @@ use App\Repository\TransactionStatusRepository;
 
 class TransactionStatusService
 {
-    private $transactionStatusRepository;
+    private $statusRepo;
 
-    public function __construct(TransactionStatusRepository $transactionStatusRepository)
+    public function __construct(TransactionStatusRepository $statusRepo)
     {
-        $this->transactionStatusRepository = $transactionStatusRepository;
+        $this->statusRepo = $statusRepo;
     }
 
     public function getStatus(int $status): ?TransactionStatus
     {
-        return $this->transactionStatusRepository->find($status);
+        return $this->statusRepo->find($status);
     }
 }

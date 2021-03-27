@@ -7,15 +7,15 @@ use App\Repository\TransactionCategoryRepository;
 
 class TransactionCategoryService
 {
-    private $transactionCategoryRepository;
+    private $categoryRepo;
 
-    public function __construct(TransactionCategoryRepository $transactionCategoryRepository)
+    public function __construct(TransactionCategoryRepository $categoryRepo)
     {
-        $this->transactionCategoryRepository = $transactionCategoryRepository;
+        $this->categoryRepo = $categoryRepo;
     }
 
     public function getCategory(int $status): ?TransactionCategory
     {
-        return $this->transactionCategoryRepository->find($status);
+        return $this->categoryRepo->find($status);
     }
 }

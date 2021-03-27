@@ -7,15 +7,15 @@ use App\Repository\TransactionTypeRepository;
 
 class TransactionTypeService
 {
-    private $transactionTypeRepository;
+    private $typeRepo;
 
-    public function __construct(TransactionTypeRepository $transactionTypeRepository)
+    public function __construct(TransactionTypeRepository $typeRepo)
     {
-        $this->transactionTypeRepository = $transactionTypeRepository;
+        $this->typeRepo = $typeRepo;
     }
 
     public function getType(int $status): ?TransactionType
     {
-        return $this->transactionTypeRepository->find($status);
+        return $this->typeRepo->find($status);
     }
 }
