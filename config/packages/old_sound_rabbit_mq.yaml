@@ -1,49 +1,48 @@
 old_sound_rabbit_mq:
     connections:
         default:
-            url: '%env(RABBITMQ_URL)%'
+            url: "%env(RABBITMQ_URL)%"
     producers:
         transaction:
             connection: default
-            exchange_options: { name: 'transaction', type: direct }
+            exchange_options: { name: "transaction", type: direct }
         notification:
             connection: default
-            exchange_options: { name: 'notification', type: direct }
+            exchange_options: { name: "notification", type: direct }
     consumers:
         transaction-dead:
             connection: default
-            exchange_options: 
+            exchange_options:
                 name: transaction-dead
                 type: direct
             queue_options:
                 name: transaction-dql
-            qos_options: {prefetch_size: 0, prefetch_count: 10, global: false}
+            qos_options: { prefetch_size: 0, prefetch_count: 10, global: false }
             callback: App\Consumer\TransactionConsumer
         notification-dead:
             connection: default
-            exchange_options: 
+            exchange_options:
                 name: notification-dead
                 type: direct
             queue_options:
                 name: notification-dql
-            qos_options: {prefetch_size: 0, prefetch_count: 10, global: false}
+            qos_options: { prefetch_size: 0, prefetch_count: 10, global: false }
             callback: App\Consumer\NotificationConsumer
         transaction:
             connection: default
-            exchange_options: { name: 'transaction', type: direct }
-            qos_options: {prefetch_size: 0, prefetch_count: 10, global: false}
+            exchange_options: { name: "transaction", type: direct }
+            qos_options: { prefetch_size: 0, prefetch_count: 10, global: false }
             queue_options:
-                name: 'transaction'
-                arguments: 
-                    x-dead-letter-exchange: ['S', 'transaction-dead']
+                name: "transaction"
+                arguments:
+                    x-dead-letter-exchange: ["S", "transaction-dead"]
             callback: App\Consumer\TransactionConsumer
         notification:
             connection: default
-            exchange_options: { name: 'notification', type: direct }
-            qos_options: {prefetch_size: 0, prefetch_count: 10, global: false}
+            exchange_options: { name: "notification", type: direct }
+            qos_options: { prefetch_size: 0, prefetch_count: 10, global: false }
             queue_options:
-                name: 'notification'
-                arguments: 
-                    x-dead-letter-exchange: ['S', 'notification-dead']
+                name: "notification"
+                arguments:
+                    x-dead-letter-exchange: ["S", "notification-dead"]
             callback: App\Consumer\NotificationConsumer
-
