@@ -21,7 +21,6 @@ class TransactionTest extends TestCase
         $transaction->setStatus(new TransactionStatus);
         $transaction->setCategory(new TransactionCategory);
         $transaction->setTransfer(new TransactionTransfer);
-        $transaction->setNotification(true);
         $transaction->setDescription('My Description');
         $transaction->setValue(500);
         $transaction->setCreatedAt(new DateTime());
@@ -35,7 +34,6 @@ class TransactionTest extends TestCase
         $this->assertInstanceOf(DateTime::class, $transaction->getCreatedAt());
         $this->assertInstanceOf(DateTime::class, $transaction->getUpdatedAt());
         $this->assertEquals(500.00, $transaction->getValue());
-        $this->assertEquals(true, $transaction->getNotification());
         $this->assertEquals('My Description', $transaction->getDescription());
     }
 }

@@ -47,15 +47,9 @@ class TransactionService
         return $this->transactionRepository->findByUserId($user->getId());
     }
 
-    public function updateTransactionStatus(Transaction $transaction, int $status)
-    {
-        $this->transactionRepository->updateStatus($transaction->getId(), $status);
-    }
-
     public function createTransaction(array $data): ?Transaction
     {
         $transaction = new Transaction;
-        $transaction->setNotification($data['notification'] ?? 0);
         $transaction->setTransfer($data['transfer'] ?? null);
         $transaction->setUser($data['user'] ?? null);
         $transaction->setStatus($data['status'] ?? null);
@@ -87,13 +81,7 @@ class TransactionService
         if ($transaction->getStatus()->getId() != TransactionStatus::STATUS_PROCESSED) {
             return;
         }
-        if ($transaction->getType()->getId() == TransactionType::TYPE_DEBIT) {
-            $this->walletService->walletDebit($transaction);
-        }
-
-        if ($transaction->getType()->getId() == TransactionType::TYPE_CREDIT) {
-            $this->walletService->walletCredit($transaction);
-        }
+        $this->walletService->runTransaction($transaction);
     }
 
     private function businessValidation(Transaction $transaction)

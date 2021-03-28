@@ -20,7 +20,7 @@ class AuthorizerService
     {
         $this->client = new Client([
             'base_uri' => $containerInterface->getParameter('BASE_URL_AUTHORIZER'),
-            'timeout'  => 2.0,
+            'timeout'  => 1.0,
         ]);
     }
 

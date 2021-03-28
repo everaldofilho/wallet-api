@@ -9,6 +9,9 @@ services:
       - ./:/app
     environment:
       COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
+    depends_on:
+      - db
+      - rabbitmq
   db:
     image: postgres
     restart: always
@@ -18,3 +21,9 @@ services:
       POSTGRES_USER: postgres
     ports:
       - 5433:5432
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: wallet_rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672

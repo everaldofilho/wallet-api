@@ -63,7 +63,6 @@ class TransactionFixtures extends Fixture  implements DependentFixtureInterface
             ->setType($type)
             ->setValue($value)
             ->setStatus($status)
-            ->setNotification(1)
             ->setDescription('Transaction ' .  $status->getDescription())
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime());

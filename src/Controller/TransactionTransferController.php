@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\TransactionStatus;
-use App\Service\TransactionService;
+use App\Service\QueueNotificationService;
 use App\Service\TransactionTransferService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,19 +34,18 @@ class TransactionTransferController extends AbstractController
      * New transaction by Document
      * @Route("/document", name="transfer_document", methods="POST")
      * @SWG\Parameter(name="document", in="formData", type="string",required=true, description="CPF/CNPJ", default="01234567890")
-     * @SWG\Parameter(name="value", in="formData", type="string",required=true, description="Valor da transferencia", default="10.00")
+     * @SWG\Parameter(name="value", in="formData", type="string", required=true, description="Valor da transferencia", default="10.00")
+     * @SWG\Parameter(name="sync", in="formData", type="integer", required=false, description="0 = Síncrona, 1 = Assíncrona", default="0")
      */
     public function transferByDocument(Request $request): Response
     {
         $transactionDocument = $this->transferService->transferByDocument(
             $this->getUser(),
             $request->get('document'),
-            $request->get('value')
+            $request->get('value'),
+            $request->get('sync', 0)
         );
-        return $this->json([
-            'status' => $transactionDocument->getStatus()->getId(),
-            'message' => 'Transferencia efetuada com sucesso!'
-        ], Response::HTTP_CREATED);
+        return $this->json($transactionDocument, Response::HTTP_CREATED);
     }
 
     /**
@@ -55,17 +53,17 @@ class TransactionTransferController extends AbstractController
      * @Route("/email", name="transfer_email", methods="POST")
      * @SWG\Parameter(name="email", in="formData", type="string",required=true, description="E-mail", default="financeiro@logistax.com.br")
      * @SWG\Parameter(name="value", in="formData", type="string",required=true, description="Valor da transferencia", default="10.00")
+     * @SWG\Parameter(name="sync", in="formData", type="integer",required=false, description="0 = Síncrona, 1 = Assíncrona", default="0")
      */
     public function transferByEmail(Request $request): Response
     {
         $transactionEmail = $this->transferService->transferByEmail(
             $this->getUser(),
             $request->get('email'),
-            $request->get('value')
+            $request->get('value'),
+            $request->get('sync', 0),
         );
-        return $this->json([
-            'status' => $transactionEmail->getStatus()->getId(),
-            'message' => 'Transferencia efetuada com sucesso!'
-        ], Response::HTTP_CREATED);
+
+        return $this->json($transactionEmail , Response::HTTP_CREATED);
     }
 }

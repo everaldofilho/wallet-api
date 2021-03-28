@@ -7,6 +7,11 @@ setup:
 	make migrate
 	make seed
 
+	# Habilita transferencia entre filas
+	docker-compose exec -T rabbitmq rabbitmq-plugins enable rabbitmq_shovel rabbitmq_shovel_management
+
+	# Cria estrutura de fila
+	docker-compose exec -T app php bin/console rabbitmq:setup-fabric
 migrate:
 	docker-compose exec -T app php bin/console doctrine:migrations:migrate -n
 
@@ -29,3 +34,12 @@ reset:
 	docker-compose exec app php bin/console make:migration -n
 	make migrate
 	make seed
+
+queue-transaction:
+	docker-compose exec app php bin/console rabbitmq:consumer transaction
+queue-notification:
+	docker-compose exec app php bin/console rabbitmq:consumer notification
+queue-transaction-dead:
+	docker-compose exec app php bin/console rabbitmq:consumer transaction_dead
+queue-notification-dead:
+	docker-compose exec app php bin/console rabbitmq:consumer notification_dead

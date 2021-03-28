@@ -3,14 +3,13 @@
 namespace App\Service;
 
 use App\Entity\Transaction;
+use App\Entity\TransactionType;
 use App\Entity\User;
-use App\Entity\UserType;
 use App\Entity\Wallet;
 use App\Exception\ValidationException;
 use App\Repository\WalletRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class WalletService
@@ -31,7 +30,27 @@ class WalletService
 
     public function getWallet(User $user): ?Wallet
     {
-        return $this->walletRepository->findOneBy(['user' => $user->getId()]);
+        return $this->walletRepository->getWallet($user->getId());
+    }
+
+    public function runTransaction(Transaction $transaction):? Wallet
+    {
+        
+        $wallet = $this->getWallet($transaction->getUser());
+
+        if ($transaction->getType()->getId() == TransactionType::TYPE_DEBIT) {
+            $balance = $wallet->getBalance() - $transaction->getValue();
+        } else {
+            $balance = $wallet->getBalance() + $transaction->getValue();
+        }
+
+        $wallet->setLastTransaction($transaction);
+        $wallet->setBalance($balance);
+        $wallet->setUpdatedAt(new DateTime());
+
+        $this->em->persist($wallet);
+        $this->em->flush();
+        return $wallet;
     }
 
     public function createWallet(User $user, $balance = 0): ?Wallet
@@ -50,23 +69,5 @@ class WalletService
         $this->em->persist($wallet);
         $this->em->flush();
         return $wallet;
-    }
-
-    public function walletCredit(Transaction $transaction)
-    {
-        $this->walletRepository->credit(
-            $transaction->getId(),
-            $transaction->getUser()->getId(),
-            $transaction->getValue()
-        );
-    }
-
-    public function walletDebit(Transaction $transaction)
-    {
-        $this->walletRepository->debit(
-            $transaction->getId(),
-            $transaction->getUser()->getId(),
-            $transaction->getValue()
-        );
     }
 }

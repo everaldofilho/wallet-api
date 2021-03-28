@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Transaction;
 use App\Entity\Wallet;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,35 +21,16 @@ class WalletRepository extends ServiceEntityRepository
         parent::__construct($registry, Wallet::class);
     }
 
-    public function debit($transaction_id, $user_id, float $value)
-    {
-        $result = $this->getEntityManager()
-            ->createQuery('UPDATE App\Entity\Wallet t 
-                SET t.balance = t.balance + :value,
-                t.last_transaction = :transaction_id
-                where t.user = :user_id')
-            ->setParameters([
-                'transaction_id' => $transaction_id,
-                'user_id' => $user_id,
-                'value' => $value
-            ])
-            ->execute();
 
-        return $result;
+    public function getWallet($id): ? Wallet
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.user = :user')
+            ->setParameter('user', $id)
+            ->orderBy('u.id', 'ASC')
+            ->getQuery()
+            ->getSingleResult();
     }
 
-    public function credit($transaction_id,  $user_id, float $value)
-    {
-        $result = $this->getEntityManager()
-            ->createQuery('UPDATE App\Entity\Wallet t 
-                SET t.balance = t.balance - :value,  t.last_transaction = :transaction_id
-                where t.user = :user_id')
-            ->setParameters([
-                'transaction_id' => $transaction_id,
-                'user_id' => $user_id,
-                'value' => $value
-            ])
-            ->execute();
-        return $result;
-    }
+   
 }

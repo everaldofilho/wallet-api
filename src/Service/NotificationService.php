@@ -21,20 +21,17 @@ class NotificationService
     {
         $this->client = new Client([
             'base_uri' => $containerInterface->getParameter('BASE_URL_NOTIFICATION'),
-            'timeout'  => 2.0,
+            'timeout'  => 1.0,
         ]);
     }
 
-    public function sendNotification(Transaction $transaction): ?bool
+    public function send($user_id, $message): ?bool
     {
         try {
             /** @var Response */
             $response = $this->client->post('v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04', [
-                'email' => $transaction->getToUser()->getEmail(),
-                'message' => sprintf(
-                    "Você recebeu o valor de %s",
-                    $transaction->getValue()
-                )
+                'email' => $user_id,
+                'message' => $message
             ]);
 
             $data = json_decode($response->getBody());

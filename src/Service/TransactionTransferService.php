@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Transaction;
 use App\Entity\TransactionCategory;
 use App\Entity\TransactionStatus;
 use App\Entity\TransactionTransfer;
@@ -17,6 +18,10 @@ use Throwable;
 
 class TransactionTransferService
 {
+
+    /** @var EntityManagerInterface */
+    private $em;
+
     /** @var TransactionService */
     private $transactionService;
 
@@ -32,8 +37,14 @@ class TransactionTransferService
     /** @var TransactionCategoryService */
     private $categoryService;
 
-    /** @var EntityManagerInterface */
-    private $em;
+    /** @var QueueTransactionService */
+    private $queueTransactionService;
+
+    /** @var QueueNotificationService */
+    private $queueNotificationService;
+
+    /** @var WalletService */
+    private $walletService;
 
     /** @var UserService */
     private $userService;
@@ -47,7 +58,10 @@ class TransactionTransferService
         TransactionStatusService $statusService,
         TransactionTypeService $typeService,
         TransactionCategoryService $categoryService,
+        QueueTransactionService $queueTransactionService,
+        QueueNotificationService $queueNotificationService,
         UserService $userService,
+        WalletService $walletService,
         AuthorizerService $authorizerService,
         ValidatorInterface $validator
     ) {
@@ -57,29 +71,51 @@ class TransactionTransferService
         $this->statusService = $statusService;
         $this->typeService = $typeService;
         $this->categoryService = $categoryService;
+        $this->queueTransactionService = $queueTransactionService;
+        $this->queueNotificationService = $queueNotificationService;
+        $this->walletService = $walletService;
         $this->authorizerService = $authorizerService;
         $this->validator = $validator;
     }
 
-    public function transferByDocument(User $from_user, $document, float $value): ? TransactionTransfer
+    public function transferByDocument(User $from_user, $document, float $value, $async = false): ?TransactionTransfer
     {
         $to_user = $this->userService->getUserByDocument($document);
-        $transfer = $this->transfer($from_user, $to_user, $value);
+        $transfer = $this->transferSync($from_user, $to_user, $value, $async);
         return $transfer;
     }
 
-    public function transferByEmail(User $from_user, $email, float $value): ? TransactionTransfer
+    public function transferByEmail(User $from_user, $email, float $value, $async = false): ?TransactionTransfer
     {
         $to_user = $this->userService->getUserByEmail($email);
-        $transfer = $this->transfer($from_user, $to_user, $value);
+        $transfer = $this->transferSync($from_user, $to_user, $value, $async);
         return $transfer;
     }
 
-    public function transfer(User $from_user, ?User $to_user, float $value): ? TransactionTransfer
+    public function transferSync(User $from_user, ?User $to_user, float $value, $async = false): ?TransactionTransfer
     {
-        $transfer = $this->createTransfer($from_user, $to_user, $value);
+        $status = $async ? TransactionStatus::STATUS_QUEUE : TransactionStatus::STATUS_PROCESSING;
+        $transfer = $this->createTransfer($from_user, $to_user, $value, $status);
+        if ($async) {
+            $this->queueTransactionService->publishTransaction($transfer);
+            return $transfer;
+        }
+        return $this->transfer($transfer);
+    }
+
+    public function getTransfer(string $id): ?TransactionTransfer
+    {
+        return $this->em->getRepository(TransactionTransfer::class)->find($id);
+    }
+
+    public function transfer(TransactionTransfer $transfer): ?TransactionTransfer
+    {
         $this->em->beginTransaction();
         try {
+
+            if ($transfer->getStatus()->getId() == TransactionStatus::STATUS_PROCESSED) {
+                throw new TransactionException("Transaction already processed", TransactionStatus::STATUS_DENIED);
+            }
 
             if (!$this->authorizerService->isAuthorized()) {
                 throw new TransactionException("No authorized", TransactionStatus::STATUS_DENIED);
@@ -89,6 +125,9 @@ class TransactionTransferService
             $this->createTransactions($transfer);
 
             $this->em->commit();
+
+            $this->queueNotificationService->publishTransfer($transfer);
+
             return $transfer;
         } catch (TransactionException $th) {
             $this->em->rollback();
@@ -101,17 +140,17 @@ class TransactionTransferService
         }
     }
 
-
     private function updateStatus(TransactionTransfer $transfer, int $status)
     {
         $transfer->setStatus($this->statusService->getStatus($status));
+        $transfer->setUpdatedAt(new DateTime());
         $this->em->persist($transfer);
         $this->em->flush();
     }
 
-    private function createTransfer(?User $from_user, ?User $to_user, float $value)
+    private function createTransfer(?User $from_user, ?User $to_user, float $value, int $status)
     {
-        $status = $this->statusService->getStatus(TransactionStatus::STATUS_PROCESSING);
+        $status = $this->statusService->getStatus($status);
 
         $transfer  = new TransactionTransfer;
         $transfer->setFromUser($from_user);
@@ -164,13 +203,17 @@ class TransactionTransferService
 
     private function businessValidation(TransactionTransfer $transfer)
     {
-
         if ($transfer->getToUser()->getId() == $transfer->getFromUser()->getId()) {
             throw new TransactionException("Not authorized to make transfers for yourself!");
         }
 
         if ($transfer->getFromUser()->getType()->getId() == UserType::TYPE_COMPANY) {
             throw new TransactionException("Unauthorized company transfer!");
+        }
+
+        $wallet = $this->walletService->getWallet($transfer->getFromUser());
+        if ($transfer->getValue() >= $wallet->getBalance()) {
+            throw new TransactionException("Insufficient balance! 1");
         }
     }
 }
