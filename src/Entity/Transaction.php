@@ -62,11 +62,6 @@ class Transaction implements JsonSerializable
      */
     private $value;
 
-    /**
-     * @Assert\NotBlank
-     * @ORM\Column(type="boolean")
-     */
-    private $notification;
 
     public function jsonSerialize()
     {
@@ -127,17 +122,6 @@ class Transaction implements JsonSerializable
     public function setValue(float $value): self
     {
         $this->value = $value;
-        return $this;
-    }
-
-    public function getNotification(): int
-    {
-        return $this->notification;
-    }
-
-    public function setNotification(int $notification)
-    {
-        $this->notification = $notification;
         return $this;
     }
 

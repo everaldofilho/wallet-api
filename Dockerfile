@@ -8,4 +8,6 @@ ENV PHP_DATE_TIMEZONE America/Sao_Paulo
 RUN pecl install -f xdebug-2.9.8 && \
     docker-php-ext-enable xdebug 
 
+COPY ./supervisor.conf /opt/docker/etc/supervisor.d/supervisor.conf
+
 WORKDIR /app

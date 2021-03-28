@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210327135309 extends AbstractMigration
+final class Version20210328223429 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,7 +20,7 @@ final class Version20210327135309 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE transaction (id UUID NOT NULL, user_id UUID DEFAULT NULL, transaction_status_id INT DEFAULT NULL, transaction_type_id INT DEFAULT NULL, transaction_category_id INT DEFAULT NULL, transaction_transfer_id UUID DEFAULT NULL, description VARCHAR(100) NOT NULL, value NUMERIC(10, 2) NOT NULL, notification BOOLEAN NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE transaction (id UUID NOT NULL, user_id UUID DEFAULT NULL, transaction_status_id INT DEFAULT NULL, transaction_type_id INT DEFAULT NULL, transaction_category_id INT DEFAULT NULL, transaction_transfer_id UUID DEFAULT NULL, description VARCHAR(100) NOT NULL, value NUMERIC(10, 2) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_723705D1A76ED395 ON transaction (user_id)');
         $this->addSql('CREATE INDEX IDX_723705D128D09BFE ON transaction (transaction_status_id)');
         $this->addSql('CREATE INDEX IDX_723705D1B3E6B071 ON transaction (transaction_type_id)');

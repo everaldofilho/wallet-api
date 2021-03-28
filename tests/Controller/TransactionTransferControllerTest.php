@@ -17,6 +17,22 @@ class TransactionTransferControllerTest extends TestCase
         $this->createUser('01234567890', 'ROLE_USER');
     }
 
+    public function testTransferByDocumentAsyncWithSuccess()
+    {
+        $data = [
+            'document' => '98630176000121',
+            'value' => 55.66,
+            'sync' => true
+        ];
+        $this->client->request('POST', '/api/transaction/transfer/document', $data);
+
+        /** @var JsonResponse $response */
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+    }
+
+
     public function testTransferByDocumentWithSuccess()
     {
         $data = [

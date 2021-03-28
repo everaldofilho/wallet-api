@@ -9,14 +9,23 @@ A ideia desse projeto é poder fazer transferências entre usuários do próprio
 
 ## Setup
 
-Para subir o projeto execute o seguinte comando
+Para subir o projeto execute o seguinte comando:
 
 ````
 make setup
 ````
 
-API URL: http://localhost:8089/api/doc
+Caso queira saber o que é acontece nesse comando só abrir o arquivo "Makefile".
+
+### HOSTS
+
+RABBITMQ:http://localhost:15672/
+- User: guest
+- Password: guest
+
+WALLET API URL: http://localhost:8089/api/doc
 ![documentacao](./docs/documentation-api.png)
+
 
 POSTMAN: https://documenter.getpostman.com/view/9357548/TzCHCWB9
 
@@ -38,11 +47,14 @@ Arquivos/documentos na pasta [docs](./docs)
 
 Container: #Docker
 
+
 Linguagem: #PHP 7.4
 
 Framework: #Symfony
 
 Servidor: #Nginx
+
+Fila: #RabbitMQ
 
 Banco de dados: #Postgree
 
