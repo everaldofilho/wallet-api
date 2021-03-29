@@ -11,11 +11,29 @@ A ideia desse projeto é poder fazer transferências entre usuários do próprio
 
 Para subir o projeto execute o seguinte comando:
 
-````
+````bash
 make setup
 ````
 
 Caso queira saber o que é acontece nesse comando só abrir o arquivo "Makefile".
+
+Outros comandos uteis:
+
+````bash
+make database-create # Cria o banco
+make migrate # Cria as tabelas do banco
+make seed # Alimenta o banco com dados Fake
+make test # Rota os tests
+
+# Fila
+make queue-transaction # Roda a fila de "transaction"
+make queue-notification # Roda a fila de "notification"
+
+# Fila Dead
+make queue-transaction-dead # Roda a fila de "transaction-dql"
+make queue-notification-dead # Roda a fila de "notification-dql"
+````
+OBS: Por padrão a fila __transaction__ e __notification__ já vem em execução dentro da docker, atraves da configuração do __supervisor__ que se encontra no arquivo [./supervisor.conf](./supervisor.conf)
 
 ### HOSTS
 
@@ -34,10 +52,6 @@ Database Postgres:
 - port: `5433`
 - user: `postgres`
 - password: `root`
-
-Arquivos/documentos na pasta [docs](./docs)
-- [MER.svg](./docs/mer.svg)
-- [WalletApi.postman_collection.json](./docs/WalletApi.postman_collection.json)
 
 ## Estrutura
 
